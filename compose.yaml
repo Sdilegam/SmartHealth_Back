@@ -1,0 +1,6 @@
+﻿services:
+  smarthealth_api:
+    image: smarthealth_api
+    build:
+      context: .
+      dockerfile: SmartHealth_API/Dockerfile
