@@ -11,6 +11,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SmartHealth_Infrastructure"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SmartHealth_Domain", "SmartHealth_Domain\SmartHealth_Domain.csproj", "{133CC9F4-FB20-48E4-B28D-35E7C41F92C1}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SmartHealth_Application", "SmartHealth_Application\SmartHealth_Application.csproj", "{CFE0B072-F0DE-4BA9-B4B6-8339F1B40B28}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -29,5 +31,9 @@ Global
 		{133CC9F4-FB20-48E4-B28D-35E7C41F92C1}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{133CC9F4-FB20-48E4-B28D-35E7C41F92C1}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{133CC9F4-FB20-48E4-B28D-35E7C41F92C1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CFE0B072-F0DE-4BA9-B4B6-8339F1B40B28}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CFE0B072-F0DE-4BA9-B4B6-8339F1B40B28}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CFE0B072-F0DE-4BA9-B4B6-8339F1B40B28}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CFE0B072-F0DE-4BA9-B4B6-8339F1B40B28}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

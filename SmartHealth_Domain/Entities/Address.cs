@@ -1,13 +1,13 @@
 namespace SmartHealth_Domain.Entities;
 
-public class Address
+public record Address
 {
     // ReSharper disable once InconsistentNaming
-    public int AddressID { get; set; }
-    public string Street { get; set; } = null!;
-    public string Number { get; set; } = null!;
-    public string City { get; set; } = null!;
-    public string Zip { get; set; } = null!;
-    public string Country { get; set; } = null!;
-    public bool IsDeleted { get; set; } = false;
+    public int AddressID { get; init; }
+    public string Street { get; init; } = null!;
+    public string Number { get; init; } = null!;
+    public string City { get; init; } = null!;
+    public string Zip { get; init; } = null!;
+    public string Country { get; init; } = null!;
+    public bool IsDeleted { get; init; } = false;
 }
