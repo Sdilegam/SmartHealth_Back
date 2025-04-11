@@ -29,6 +29,27 @@ namespace SmartHealth_Infrastructure.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Doctors",
+                columns: table => new
+                {
+                    DoctorId = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    FirstName = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    LastName = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    AddressID = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Doctors", x => x.DoctorId);
+                    table.ForeignKey(
+                        name: "FK_Doctors_Addresses_AddressID",
+                        column: x => x.AddressID,
+                        principalTable: "Addresses",
+                        principalColumn: "AddressID",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Patients",
                 columns: table => new
                 {
@@ -49,10 +70,41 @@ namespace SmartHealth_Infrastructure.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
+            migrationBuilder.CreateTable(
+                name: "Telecoms",
+                columns: table => new
+                {
+                    TelecomId = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    TelecomValue = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Type = table.Column<int>(type: "int", nullable: false),
+                    Scope = table.Column<int>(type: "int", nullable: false),
+                    DoctorId = table.Column<int>(type: "int", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Telecoms", x => x.TelecomId);
+                    table.ForeignKey(
+                        name: "FK_Telecoms_Doctors_DoctorId",
+                        column: x => x.DoctorId,
+                        principalTable: "Doctors",
+                        principalColumn: "DoctorId");
+                });
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Doctors_AddressID",
+                table: "Doctors",
+                column: "AddressID");
+
             migrationBuilder.CreateIndex(
                 name: "IX_Patients_PersonalAdressAddressID",
                 table: "Patients",
                 column: "PersonalAdressAddressID");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Telecoms_DoctorId",
+                table: "Telecoms",
+                column: "DoctorId");
         }
 
         /// <inheritdoc />
@@ -60,6 +112,12 @@ namespace SmartHealth_Infrastructure.Migrations
         {
             migrationBuilder.DropTable(
                 name: "Patients");
+
+            migrationBuilder.DropTable(
+                name: "Telecoms");
+
+            migrationBuilder.DropTable(
+                name: "Doctors");
 
             migrationBuilder.DropTable(
                 name: "Addresses");

@@ -12,6 +12,5 @@ public class BaseRepository<TEntity>(SmartHealthContext context): IRepositoryBas
     public virtual List<TEntity> GetAll()
     {
         return (this.Entities.ToList());
-        // return (new List<TEntity>());
     }
 }

@@ -8,6 +8,5 @@ public class PatientConfig: IEntityTypeConfiguration<Patient>
 {
     public void Configure(EntityTypeBuilder<Patient> builder)
     {
-        
     }
 }

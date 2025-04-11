@@ -6,4 +6,5 @@ public record Doctor
     public string FirstName{ get; init; }
     public string LastName{ get; init; }
     public List<Telecom> Telecoms { get; init; }
+    public Address Address { get; init; }
 }

@@ -11,7 +11,7 @@ using SmartHealth_Infrastructure;
 namespace SmartHealth_Infrastructure.Migrations
 {
     [DbContext(typeof(SmartHealthContext))]
-    [Migration("20250410101156_Initial")]
+    [Migration("20250410131826_Initial")]
     partial class Initial
     {
         /// <inheritdoc />
@@ -60,6 +60,32 @@ namespace SmartHealth_Infrastructure.Migrations
                     b.ToTable("Addresses");
                 });
 
+            modelBuilder.Entity("SmartHealth_Domain.Entities.Doctor", b =>
+                {
+                    b.Property<int>("DoctorId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("DoctorId"));
+
+                    b.Property<int>("AddressID")
+                        .HasColumnType("int");
+
+                    b.Property<string>("FirstName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("LastName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("DoctorId");
+
+                    b.HasIndex("AddressID");
+
+                    b.ToTable("Doctors");
+                });
+
             modelBuilder.Entity("SmartHealth_Domain.Entities.Patient", b =>
                 {
                     b.Property<int>("PatientID")
@@ -86,6 +112,45 @@ namespace SmartHealth_Infrastructure.Migrations
                     b.ToTable("Patients");
                 });
 
+            modelBuilder.Entity("SmartHealth_Domain.Entities.Telecom", b =>
+                {
+                    b.Property<int>("TelecomId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("TelecomId"));
+
+                    b.Property<int?>("DoctorId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Scope")
+                        .HasColumnType("int");
+
+                    b.Property<string>("TelecomValue")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("Type")
+                        .HasColumnType("int");
+
+                    b.HasKey("TelecomId");
+
+                    b.HasIndex("DoctorId");
+
+                    b.ToTable("Telecoms");
+                });
+
+            modelBuilder.Entity("SmartHealth_Domain.Entities.Doctor", b =>
+                {
+                    b.HasOne("SmartHealth_Domain.Entities.Address", "Address")
+                        .WithMany()
+                        .HasForeignKey("AddressID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Address");
+                });
+
             modelBuilder.Entity("SmartHealth_Domain.Entities.Patient", b =>
                 {
                     b.HasOne("SmartHealth_Domain.Entities.Address", "PersonalAdress")
@@ -95,6 +160,18 @@ namespace SmartHealth_Infrastructure.Migrations
                         .IsRequired();
 
                     b.Navigation("PersonalAdress");
+                });
+
+            modelBuilder.Entity("SmartHealth_Domain.Entities.Telecom", b =>
+                {
+                    b.HasOne("SmartHealth_Domain.Entities.Doctor", null)
+                        .WithMany("Telecoms")
+                        .HasForeignKey("DoctorId");
+                });
+
+            modelBuilder.Entity("SmartHealth_Domain.Entities.Doctor", b =>
+                {
+                    b.Navigation("Telecoms");
                 });
 #pragma warning restore 612, 618
         }
