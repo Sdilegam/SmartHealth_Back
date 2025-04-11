@@ -37,7 +37,12 @@ public class SmartHealthContext(DbContextOptions options) : DbContext(options)
                 context.Set<Address>().AddRange(addresses);
             }
 
+            Faker<Login>? loginFaker = new Faker<Login>().UseSeed(42)
+                .RuleFor(login => login.Email, f => f.Internet.Email())
+                .RuleFor(login => login.Username, f => f.Internet.UserName())
+                .RuleFor(login => login.Password, f => f.Internet.Password());
             Faker<Patient>? patientFaker = new Faker<Patient>().UseSeed(42)
+                .RuleFor(patient => patient.Login,  f => loginFaker.Generate())
                 .RuleFor(patient => patient.FirstName, f => f.Name.FirstName())
                 .RuleFor(patient => patient.LastName, f => f.Name.LastName())
                 .RuleFor(patient => patient.PersonalAdress, f => f.Random.ListItem(addresses));
@@ -56,7 +61,9 @@ public class SmartHealthContext(DbContextOptions options) : DbContext(options)
                 .RuleFor(doctor => doctor.FirstName, f => f.Name.FirstName())
                 .RuleFor(doctor => doctor.LastName, f => f.Name.LastName())
                 .RuleFor(doctor => doctor.Telecoms, _ => telecomFaker.Generate(4))
-                .RuleFor(doctor => doctor.Address, _ => addressFaker.Generate());
+                .RuleFor(doctor => doctor.ProfessionalAddress, _ => addressFaker.Generate())
+                .RuleFor(doctor => doctor.PersonalAddress, _ => addressFaker.Generate())
+                .RuleFor(doctor => doctor.Login, faker => loginFaker.Generate());
             
             var firstDoctor = context.Set<Doctor>().FirstOrDefault(doctor => doctor.DoctorId == 1);
             if (firstDoctor == null)

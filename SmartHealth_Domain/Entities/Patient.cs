@@ -7,4 +7,5 @@ public record Patient
     public string LastName { get; init; } = null!;
     public string FirstName { get; init; } = null!;
     public Address PersonalAdress { get; init; } = null!;
+    public Login Login { get; init; } = null!;
 }

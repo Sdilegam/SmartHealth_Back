@@ -26,9 +26,9 @@ using (var scope = app.Services.CreateScope())
 if (app.Environment.IsDevelopment())
 {
     app.MapOpenApi();
-    app.MapScalarApiReference(options =>
+    app.MapScalarApiReference("/test",options =>
     {
-        options.WithTitle("Test")
+        options.WithTitle("Hihi")
             .WithDefaultHttpClient(ScalarTarget.JavaScript, ScalarClient.Fetch)
             .WithDarkMode(false)
             .Servers = [new("http://localhost:8001")];
