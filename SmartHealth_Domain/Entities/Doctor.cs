@@ -3,8 +3,10 @@
 public record Doctor
 {
     public int DoctorId { get; init; }
-    public string FirstName{ get; init; } = null!;
-    public string LastName{ get; init; } = null!;
+
+    public string Avatar { get; init; } = null!;
+    public string FirstName { get; init; } = null!;
+    public string LastName { get; init; } = null!;
     public List<Telecom> Telecoms { get; init; } = null!;
     public Address ProfessionalAddress { get; init; } = null!;
     public Address PersonalAddress { get; init; } = null!;

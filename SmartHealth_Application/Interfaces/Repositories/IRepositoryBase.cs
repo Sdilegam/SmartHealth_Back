@@ -3,4 +3,5 @@
 public interface IRepositoryBase<TEntity> where TEntity : class
 {
     List<TEntity> GetAll();
+    IQueryable<TEntity> GetAllQueryable();
 }

@@ -1,0 +1,20 @@
+using SmartHealth_Application.DTOs.Doctor;
+using SmartHealth_Domain.Entities;
+
+namespace SmartHealth_Application.Mappers;
+
+public static class DoctorMapper
+{
+    public static DoctorListDTO ToDoctorListDTO(this Doctor entity)
+    {
+        DoctorListDTO DTOToReturn = new()
+        {
+            DoctorID = entity.DoctorId,
+            FirstName = entity.FirstName,
+            LastName = entity.LastName,
+            Address = entity.ProfessionalAddress.ToDTO(),
+            Avatar = entity.Avatar
+        };
+        return DTOToReturn;
+    } 
+}

@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using System.Linq.Expressions;
+using Microsoft.EntityFrameworkCore;
 using SmartHealth_Application.Interfaces.Repositories;
 
 namespace SmartHealth_Infrastructure.Repository;
@@ -12,5 +13,9 @@ public class BaseRepository<TEntity>(SmartHealthContext context): IRepositoryBas
     public virtual List<TEntity> GetAll()
     {
         return (this.Entities.ToList());
+    }
+    public virtual IQueryable<TEntity> GetAllQueryable()
+    {
+        return (this.Entities);
     }
 }

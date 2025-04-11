@@ -18,6 +18,7 @@ public class SmartHealthContext(DbContextOptions options) : DbContext(options)
         modelBuilder.ApplyConfiguration(new AddressConfig());
         modelBuilder.ApplyConfiguration(new PatientConfig());
         modelBuilder.Entity<Patient>().Navigation(patient => patient.PersonalAdress).AutoInclude();
+        modelBuilder.Entity<Doctor>().Navigation(doctor => doctor.ProfessionalAddress).AutoInclude();
     }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
@@ -63,7 +64,8 @@ public class SmartHealthContext(DbContextOptions options) : DbContext(options)
                 .RuleFor(doctor => doctor.Telecoms, _ => telecomFaker.Generate(4))
                 .RuleFor(doctor => doctor.ProfessionalAddress, _ => addressFaker.Generate())
                 .RuleFor(doctor => doctor.PersonalAddress, _ => addressFaker.Generate())
-                .RuleFor(doctor => doctor.Login, faker => loginFaker.Generate());
+                .RuleFor(doctor => doctor.Login, faker => loginFaker.Generate())
+                .RuleFor(doctor => doctor.Avatar, f => f.Internet.Avatar());
             
             var firstDoctor = context.Set<Doctor>().FirstOrDefault(doctor => doctor.DoctorId == 1);
             if (firstDoctor == null)

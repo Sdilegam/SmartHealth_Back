@@ -8,7 +8,7 @@ namespace SmartHealth_API.Controllers;
 public class PatientController(IPatientRepository repository): ControllerBase
 {
     [HttpGet]
-    public IActionResult getAllPatients()
+    public IActionResult GetAllPatients()
     {
         return Ok(repository.GetAll());
     }
