@@ -27,7 +27,9 @@ using (var scope = app.Services.CreateScope())
     db.Database.Migrate();
 }
 
-app.MapGet("", async (context) => { context.Response.Redirect("http://localhost:5261/scalar"); });
+var port = app.Configuration["Host:Port"];
+
+app.MapGet("", async (context) => { context.Response.Redirect($"http://localhost:{port}/scalar"); });
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
@@ -38,7 +40,7 @@ if (app.Environment.IsDevelopment())
         options.WithTitle("SmartHealth - Scalar")
             .WithDefaultHttpClient(ScalarTarget.JavaScript, ScalarClient.Fetch)
             .WithDarkMode(false)
-            .Servers = [new ("http://localhost:8001")];
+            .Servers = [new ($"http://localhost:{port}")];
     });
 }
 

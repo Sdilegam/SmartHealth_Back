@@ -5,7 +5,7 @@ services:
   SmartHealth_DB:
     image: mcr.microsoft.com/mssql/server:2022-latest
     ports:
-    - 8002:1433
+    - 8001:1433
     environment:
       - ACCEPT_EULA=Y
       - SA_PASSWORD=$DB_SA_PASSWORD
@@ -17,10 +17,11 @@ services:
       context: .
       dockerfile: SmartHealth_API/Dockerfile
     ports:
-      - 8001:8080
+      - $API_PORT:8080
     depends_on:
       - SmartHealth_DB
     environment:
       - ConnectionStrings:Main=Server=SmartHealth_DB;Database=SmartHealth_DB;User ID=sa;Password=$DB_SA_PASSWORD;TrustServerCertificate=true
+      - Host:Port=$API_PORT
     networks:
       - SmartHealth_Backend
