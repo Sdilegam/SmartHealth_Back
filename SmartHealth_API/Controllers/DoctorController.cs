@@ -10,11 +10,15 @@ namespace SmartHealth_API.Controllers;
 public class DoctorController(IDoctorService doctorService): ControllerBase
 {
     [HttpGet]
+    [ProducesResponseType<DoctorListDTO[]>(StatusCodes.Status200OK, "application/json")]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
     public IActionResult Index([FromQuery] DoctorSearchDTO? searchDTO)
     {
         List<DoctorListDTO> doctorsToReturn = null!;
         
         doctorsToReturn = doctorService.GetAll(searchDTO);
+        if (doctorsToReturn.Count == 0)
+            return (NoContent());
         return (Ok(doctorsToReturn));
     }
 }
