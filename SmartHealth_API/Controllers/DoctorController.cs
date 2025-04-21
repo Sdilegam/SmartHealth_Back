@@ -1,8 +1,7 @@
-using Bogus.DataSets;
 using Microsoft.AspNetCore.Mvc;
 using SmartHealth_Application.DTOs.Doctor;
+using SmartHealth_Application.DTOs.DoctorAvailability;
 using SmartHealth_Application.Interfaces.Services;
-using SmartHealth_Domain.Entities;
 
 namespace SmartHealth_API.Controllers;
 [ApiController]
@@ -20,5 +19,15 @@ public class DoctorController(IDoctorService doctorService): ControllerBase
         if (doctorsToReturn.Count == 0)
             return (NoContent());
         return (Ok(doctorsToReturn));
+    }
+
+    [HttpPost("{id}/availability")]
+    [ProducesResponseType<List<AvailabilityReturnDTO>>(StatusCodes.Status200OK, "application/json")]
+
+    public IActionResult Availability([FromRoute] int id, [FromBody] AvailabilityRequestRange range)
+    {
+        AvailabilityReturnDTO availabilityReturn = null!;
+        availabilityReturn = doctorService.GetAvailability(id, range);
+        return (Ok(availabilityReturn));
     }
 }

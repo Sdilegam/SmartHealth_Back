@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using SmartHealth_Infrastructure;
 
@@ -11,9 +12,11 @@ using SmartHealth_Infrastructure;
 namespace SmartHealth_Infrastructure.Migrations
 {
     [DbContext(typeof(SmartHealthContext))]
-    partial class SmartHealthContextModelSnapshot : ModelSnapshot
+    [Migration("20250417130832_Adding doctors availability and appointments")]
+    partial class Addingdoctorsavailabilityandappointments
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -21,6 +24,36 @@ namespace SmartHealth_Infrastructure.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
+
+            modelBuilder.Entity("AppointmentDoctor", b =>
+                {
+                    b.Property<int>("AppointmentsAppointmentID")
+                        .HasColumnType("int");
+
+                    b.Property<int>("DoctorsDoctorId")
+                        .HasColumnType("int");
+
+                    b.HasKey("AppointmentsAppointmentID", "DoctorsDoctorId");
+
+                    b.HasIndex("DoctorsDoctorId");
+
+                    b.ToTable("AppointmentDoctor");
+                });
+
+            modelBuilder.Entity("AppointmentPatient", b =>
+                {
+                    b.Property<int>("AppointmentsAppointmentID")
+                        .HasColumnType("int");
+
+                    b.Property<int>("PatientsPatientID")
+                        .HasColumnType("int");
+
+                    b.HasKey("AppointmentsAppointmentID", "PatientsPatientID");
+
+                    b.HasIndex("PatientsPatientID");
+
+                    b.ToTable("AppointmentPatient");
+                });
 
             modelBuilder.Entity("SmartHealth_Domain.Entities.Address", b =>
                 {
@@ -66,14 +99,8 @@ namespace SmartHealth_Infrastructure.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("AppointmentID"));
 
-                    b.Property<int>("DoctorId")
-                        .HasColumnType("int");
-
                     b.Property<TimeSpan>("Duration")
                         .HasColumnType("time");
-
-                    b.Property<int>("PatientID")
-                        .HasColumnType("int");
 
                     b.Property<string>("PatientsNotes")
                         .IsRequired()
@@ -89,10 +116,6 @@ namespace SmartHealth_Infrastructure.Migrations
                         .HasColumnType("int");
 
                     b.HasKey("AppointmentID");
-
-                    b.HasIndex("DoctorId");
-
-                    b.HasIndex("PatientID");
 
                     b.ToTable("Appointment");
                 });
@@ -158,11 +181,17 @@ namespace SmartHealth_Infrastructure.Migrations
                     b.Property<int?>("DoctorId")
                         .HasColumnType("int");
 
-                    b.Property<TimeOnly>("EndTime")
-                        .HasColumnType("time");
+                    b.Property<int>("EndHour")
+                        .HasColumnType("int");
 
-                    b.Property<TimeOnly>("StartTime")
-                        .HasColumnType("time");
+                    b.Property<int>("EndMinute")
+                        .HasColumnType("int");
+
+                    b.Property<int>("StartHour")
+                        .HasColumnType("int");
+
+                    b.Property<int>("StartMinute")
+                        .HasColumnType("int");
 
                     b.Property<DateTime?>("ValidtyEnd")
                         .HasColumnType("datetime2");
@@ -261,23 +290,34 @@ namespace SmartHealth_Infrastructure.Migrations
                     b.ToTable("Telecoms");
                 });
 
-            modelBuilder.Entity("SmartHealth_Domain.Entities.Appointment", b =>
+            modelBuilder.Entity("AppointmentDoctor", b =>
                 {
-                    b.HasOne("SmartHealth_Domain.Entities.Doctor", "Doctor")
-                        .WithMany("Appointments")
-                        .HasForeignKey("DoctorId")
+                    b.HasOne("SmartHealth_Domain.Entities.Appointment", null)
+                        .WithMany()
+                        .HasForeignKey("AppointmentsAppointmentID")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("SmartHealth_Domain.Entities.Patient", "Patient")
-                        .WithMany("Appointments")
-                        .HasForeignKey("PatientID")
+                    b.HasOne("SmartHealth_Domain.Entities.Doctor", null)
+                        .WithMany()
+                        .HasForeignKey("DoctorsDoctorId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("AppointmentPatient", b =>
+                {
+                    b.HasOne("SmartHealth_Domain.Entities.Appointment", null)
+                        .WithMany()
+                        .HasForeignKey("AppointmentsAppointmentID")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Doctor");
-
-                    b.Navigation("Patient");
+                    b.HasOne("SmartHealth_Domain.Entities.Patient", null)
+                        .WithMany()
+                        .HasForeignKey("PatientsPatientID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("SmartHealth_Domain.Entities.Doctor", b =>
@@ -342,16 +382,9 @@ namespace SmartHealth_Infrastructure.Migrations
 
             modelBuilder.Entity("SmartHealth_Domain.Entities.Doctor", b =>
                 {
-                    b.Navigation("Appointments");
-
                     b.Navigation("Availability");
 
                     b.Navigation("Telecoms");
-                });
-
-            modelBuilder.Entity("SmartHealth_Domain.Entities.Patient", b =>
-                {
-                    b.Navigation("Appointments");
                 });
 #pragma warning restore 612, 618
         }

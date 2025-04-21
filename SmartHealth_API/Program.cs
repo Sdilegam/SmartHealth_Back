@@ -20,10 +20,18 @@ builder.Services.AddScoped<IDoctorService, DoctorService>();
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 builder.Services.AddOpenApi();
 
+builder.Services.AddCors(b => b.AddDefaultPolicy(o =>
+{
+    o.AllowAnyMethod();
+    o.AllowAnyOrigin();
+    o.AllowAnyHeader();
+}));
+
 var app = builder.Build();
 using (var scope = app.Services.CreateScope())
 {
     var db = scope.ServiceProvider.GetRequiredService<SmartHealthContext>();
+    db.Database.EnsureDeleted();
     db.Database.Migrate();
 }
 
@@ -35,14 +43,17 @@ app.MapGet("", async (context) => { context.Response.Redirect($"http://localhost
 if (app.Environment.IsDevelopment())
 {
     app.MapOpenApi();
-    app.MapScalarApiReference(options =>
-    {
-        options.WithTitle("SmartHealth - Scalar")
-            .WithDefaultHttpClient(ScalarTarget.JavaScript, ScalarClient.Fetch)
-            .WithDarkMode(false)
-            .Servers = [new ($"http://localhost:{port}")];
-    });
+    app.MapScalarApiReference();
+    // (options =>
+    // {
+    //     options.WithTitle("SmartHealth - Scalar")
+    //         .WithDefaultHttpClient(ScalarTarget.JavaScript, ScalarClient.Fetch)
+    //         .WithDarkMode(false)
+    //         .Servers = [new ($"http://localhost:{port}")];
+    // });
 }
+
+app.UseCors();
 
 app.UseAuthorization();
 

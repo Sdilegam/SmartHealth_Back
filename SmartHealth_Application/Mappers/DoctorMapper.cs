@@ -5,7 +5,7 @@ namespace SmartHealth_Application.Mappers;
 
 public static class DoctorMapper
 {
-    public static DoctorListDTO ToDoctorListDTO(this Doctor entity)
+    public static DoctorListDTO ToDoctorListDTO(this Doctor entity, string? email = null, string? phoneNumber=null)
     {
         DoctorListDTO DTOToReturn = new()
         {
@@ -13,7 +13,10 @@ public static class DoctorMapper
             FirstName = entity.FirstName,
             LastName = entity.LastName,
             Address = entity.ProfessionalAddress.ToDTO(),
-            Avatar = entity.Avatar
+            Avatar = entity.Avatar,
+            Email = email,
+            PhoneNumber = phoneNumber,
+            LanguageSpoken = entity.LanguageSpoken,
         };
         return DTOToReturn;
     } 

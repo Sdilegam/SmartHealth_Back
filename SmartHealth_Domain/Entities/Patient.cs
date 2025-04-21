@@ -8,4 +8,5 @@ public record Patient
     public string FirstName { get; init; } = null!;
     public Address PersonalAdress { get; init; } = null!;
     public Login Login { get; init; } = null!;
+    public List<Appointment> Appointments { get; init; } = null!;
 }
