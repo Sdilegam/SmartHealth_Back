@@ -4,4 +4,5 @@ public record SlotsTaken
 {
     public DateTime StartDate { get; init; }
     public DateTime EndDate { get; init; }
+    public List<String> ClassNames { get; init; }
 }
