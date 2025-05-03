@@ -12,5 +12,8 @@ public record Appointment
     public Patient Patient { get; set; } = null!;
     public AppointmentTypeEnum Type { get; set; }
     public AppointmentStatusEnum Status { get; set; }
+    public DateTime? RealStartTime { get; set; }
+    public DateTime? RealEndTime { get; set; }
     public string PatientsNotes { get; set; } = "";
+    public string DoctorsNotes { get; set; } = "";
 };

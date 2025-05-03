@@ -6,12 +6,22 @@ using SmartHealth_Domain.Entities;
 
 namespace SmartHealth_Application.Services;
 
-public class AppointmentService(IAppointmentRepository appointmentRepository, IDoctorRepository doctorRepository, IPatientRepository patientRepository): IAppointmentService
+public class AppointmentService(IAppointmentRepository appointmentRepository, IDoctorRepository doctorRepository, IPatientRepository patientRepository, IAuthRepository authRepository): IAppointmentService
 {
-    public List<AppointmentListDTO> GetAll(int ID)
+    public List<AppointmentListDTO> GetAll(int userID, string role)
     {
-        Patient? patient = patientRepository.GetByID(ID);
-        return appointmentRepository.GetAll(patient).Select(appointment=>appointment.ToAppointmentListDTO()).ToList();
+        List<Appointment> appointments = null!;
+        if (role == "Patient")
+        {
+            Patient? user = authRepository.getPatientFromLogin(userID);
+            appointments = appointmentRepository.GetAll(user);
+        }
+        else
+        {
+            Doctor? user = authRepository.getDoctorFromLogin(userID);
+            appointments = appointmentRepository.GetAll(user);
+        }
+        return appointments.Select(appointment=>appointment.ToAppointmentListDTO()).ToList();
     }
     public Appointment CreateAppointment(int patientID, int doctorID, NewAppointmentDTO appointment)
     {

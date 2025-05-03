@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using SmartHealth_Infrastructure;
 
@@ -11,9 +12,11 @@ using SmartHealth_Infrastructure;
 namespace SmartHealth_Infrastructure.Migrations
 {
     [DbContext(typeof(SmartHealthContext))]
-    partial class SmartHealthContextModelSnapshot : ModelSnapshot
+    [Migration("20250503095850_Adding doctors notes + real starting and end time for appointments")]
+    partial class Addingdoctorsnotesrealstartingandendtimeforappointments
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -227,7 +230,7 @@ namespace SmartHealth_Infrastructure.Migrations
 
                     b.HasKey("LoginID");
 
-                    b.ToTable("Logins");
+                    b.ToTable("Login");
                 });
 
             modelBuilder.Entity("SmartHealth_Domain.Entities.Patient", b =>

@@ -51,8 +51,13 @@ builder.Services.AddScoped<IDoctorService, DoctorService>();
 builder.Services.AddScoped<IAppointmentService, AppointmentService>();
 builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<IAuthRepository, AuthRepository>();
-TokenManager.Config config = builder.Configuration.GetSection("Jwt")
-    .Get<TokenManager.Config>() ?? throw new Exception("Missing jwt config");
+TokenManager.Config config = new()
+{
+    Audience = builder.Configuration["Jwt:Audience"],
+    Duration = int.Parse(builder.Configuration["Jwt:Duration" ?? "60"]),
+    Issuer = builder.Configuration["Jwt:Issuer"],
+    Secret = builder.Configuration["Jwt:Secret"],
+};
 builder.Services.AddSingleton<ITokenManager, TokenManager>(_ => new TokenManager(config));
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 

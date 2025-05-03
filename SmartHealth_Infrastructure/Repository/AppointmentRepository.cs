@@ -13,6 +13,12 @@ public class AppointmentRepository(SmartHealthContext context): BaseRepository<A
         return(context.Appointments.Include(a=>a.Doctor).Where(a=>a.Patient==patient).ToList());
     }
 
+    public List<Appointment> GetAll(Doctor doctor)
+    {
+        return(context.Appointments.Where(a=>a.Doctor==doctor).ToList());
+
+    }
+
     public Appointment NewAppointment(Patient patient, Doctor doctor, NewAppointmentDTO appointment)
     {
         DateTime starTime = appointment.Start;
