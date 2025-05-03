@@ -9,7 +9,8 @@ namespace SmartHealth_API.Controllers;
 public class DoctorController(IDoctorService doctorService): ControllerBase
 {
     [HttpGet]
-    [ProducesResponseType<DoctorListDTO[]>(StatusCodes.Status200OK, "application/json")]
+    [Produces<DoctorListDTO[]>()]
+    // [ProducesResponseType<DoctorListDTO[]>(StatusCodes.Status200OK, "application/json")]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     public IActionResult Index([FromQuery] DoctorSearchDTO? searchDTO)
     {
@@ -23,7 +24,6 @@ public class DoctorController(IDoctorService doctorService): ControllerBase
 
     [HttpPost("{id}/availability")]
     [ProducesResponseType<List<AvailabilityReturnDTO>>(StatusCodes.Status200OK, "application/json")]
-
     public IActionResult Availability([FromRoute] int id, [FromBody] AvailabilityRequestRange range)
     {
         AvailabilityReturnDTO availabilityReturn = null!;

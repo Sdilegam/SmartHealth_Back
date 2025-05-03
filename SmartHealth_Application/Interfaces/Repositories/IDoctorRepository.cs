@@ -7,6 +7,6 @@ public interface IDoctorRepository: IRepositoryBase<Doctor>
 {
     public List<WorkingHoursDTO> GetAvailabilityList(int id, AvailabilityRequestRange range);
     public List<SlotsTaken> GetSlotsTaken(int id, AvailabilityRequestRange range);
-
+    public Doctor? GetDoctorByLoginID(int loginID);
 
 }

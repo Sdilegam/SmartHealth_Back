@@ -10,4 +10,8 @@
       <ProjectReference Include="..\SmartHealth_Domain\SmartHealth_Domain.csproj" />
     </ItemGroup>
 
+    <ItemGroup>
+      <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="6.35.0" />
+    </ItemGroup>
+
 </Project>

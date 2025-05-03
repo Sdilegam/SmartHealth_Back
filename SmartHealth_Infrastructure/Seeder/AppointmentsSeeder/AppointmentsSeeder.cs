@@ -13,9 +13,9 @@ public class AppointmentsSeeder: Faker<Appointment>
     {
         UseSeed(42);
         RuleFor(a=>a.Patient, _ => patientSeeder.Generate());
-        RuleFor(a=>a.Duration, _ => new TimeSpan(00, 30, 00));
-        RuleFor(a => a.StartTime, f => f.Date.Between(DateTime.Today.AddDays(index).AddHours(8), DateTime.Today.AddDays(index++).AddHours(18)));
-        RuleFor(a => a.Status, f => f.PickRandom<AppointmentStatusEnum>());
+        RuleFor(a=> a.StartTime, f => DateTime.Today.AddDays(index++%5).AddHours(f.Random.Int(9,17)).AddMinutes(f.Random.Int(0,1) * 30));
+        RuleFor(a=> a.EndTime, (f, a) => a.StartTime.AddMinutes(30));
+        RuleFor(a=> a.Status, f => f.PickRandom<AppointmentStatusEnum>());
         RuleFor(a=>a.Type,  f => f.PickRandom<AppointmentTypeEnum>());
     }
 }

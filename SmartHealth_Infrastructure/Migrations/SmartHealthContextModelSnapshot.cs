@@ -66,11 +66,14 @@ namespace SmartHealth_Infrastructure.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("AppointmentID"));
 
+                    b.Property<DateTime>("CreationDate")
+                        .HasColumnType("datetime2");
+
                     b.Property<int>("DoctorId")
                         .HasColumnType("int");
 
-                    b.Property<TimeSpan>("Duration")
-                        .HasColumnType("time");
+                    b.Property<DateTime>("EndTime")
+                        .HasColumnType("datetime2");
 
                     b.Property<int>("PatientID")
                         .HasColumnType("int");
@@ -94,7 +97,7 @@ namespace SmartHealth_Infrastructure.Migrations
 
                     b.HasIndex("PatientID");
 
-                    b.ToTable("Appointment");
+                    b.ToTable("Appointments");
                 });
 
             modelBuilder.Entity("SmartHealth_Domain.Entities.Doctor", b =>
@@ -109,9 +112,15 @@ namespace SmartHealth_Infrastructure.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<DateOnly>("BirthDate")
+                        .HasColumnType("date");
+
                     b.Property<string>("FirstName")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("Gender")
+                        .HasColumnType("int");
 
                     b.Property<string>("INAMI")
                         .IsRequired()
@@ -131,6 +140,9 @@ namespace SmartHealth_Infrastructure.Migrations
                         .HasColumnType("int");
 
                     b.Property<int>("ProfessionalAddressAddressID")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Speciality")
                         .HasColumnType("int");
 
                     b.HasKey("DoctorId");
@@ -174,7 +186,7 @@ namespace SmartHealth_Infrastructure.Migrations
 
                     b.HasIndex("DoctorId");
 
-                    b.ToTable("DoctorAvailability");
+                    b.ToTable("Availabilities");
                 });
 
             modelBuilder.Entity("SmartHealth_Domain.Entities.Login", b =>
@@ -193,6 +205,12 @@ namespace SmartHealth_Infrastructure.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int>("Role")
+                        .HasColumnType("int");
+
+                    b.Property<Guid>("SaltKey")
+                        .HasColumnType("uniqueidentifier");
+
                     b.Property<string>("Username")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -210,9 +228,15 @@ namespace SmartHealth_Infrastructure.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("PatientID"));
 
+                    b.Property<DateOnly>("BirthDate")
+                        .HasColumnType("date");
+
                     b.Property<string>("FirstName")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("Gender")
+                        .HasColumnType("int");
 
                     b.Property<string>("LastName")
                         .IsRequired()
@@ -223,6 +247,9 @@ namespace SmartHealth_Infrastructure.Migrations
 
                     b.Property<int>("PersonalAdressAddressID")
                         .HasColumnType("int");
+
+                    b.Property<string>("PhoneNumber")
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("PatientID");
 

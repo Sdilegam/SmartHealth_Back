@@ -4,12 +4,13 @@ namespace SmartHealth_Domain.Entities;
 
 public record Appointment
 {
-    public int AppointmentID { get; init; }
-    public DateTime StartTime { get; init; }
-    public TimeSpan Duration { get; init; }
-    public Doctor Doctor { get; init; } = null!;
-    public Patient Patient { get; init; } = null!;
-    public AppointmentTypeEnum Type { get; init; }
-    public AppointmentStatusEnum Status { get; init; }
-    public string PatientsNotes { get; init; } = "";
+    public int AppointmentID { get; set; }
+    public DateTime StartTime { get; set; }
+    public DateTime EndTime { get; set; }
+    public DateTime CreationDate { get; set; } = DateTime.Now;
+    public Doctor Doctor { get; set; } = null!;
+    public Patient Patient { get; set; } = null!;
+    public AppointmentTypeEnum Type { get; set; }
+    public AppointmentStatusEnum Status { get; set; }
+    public string PatientsNotes { get; set; } = "";
 };

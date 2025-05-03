@@ -17,6 +17,7 @@ public static class DoctorMapper
             Email = email,
             PhoneNumber = phoneNumber,
             LanguageSpoken = entity.LanguageSpoken,
+            Speciality = entity.Speciality
         };
         return DTOToReturn;
     } 

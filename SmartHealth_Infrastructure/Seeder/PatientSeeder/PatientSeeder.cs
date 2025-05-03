@@ -1,11 +1,12 @@
 ﻿using Bogus;
 using SmartHealth_Domain.Entities;
+using SmartHealth_Domain.Enums;
 
 namespace SmartHealth_Infrastructure.Seeder.PatientSeeder;
 
 public class PatientSeeder:Faker<Patient>
 {
-    private LoginSeeder.LoginSeeder loginSeeder = new();
+    private LoginSeeder.LoginSeeder loginSeeder = new(RolesEnum.Patient);
     private AddressesSeeder.AddressesSeeder addressesSeeder = new();
     public PatientSeeder():base("fr")
     {

@@ -11,6 +11,6 @@ public class PhoneNumberSeeder : Faker<Telecom>
         UseSeed(42);
         RuleFor(telecom => telecom.TelecomValue, faker => faker.Phone.PhoneNumber("#### ######"));
         RuleFor(telecom => telecom.Scope, faker => faker.PickRandom<ScopeEnum>());
-        RuleFor(telecom => telecom.Type, _ => TelecomsTypeEnum.EmailAddress);
+        RuleFor(telecom => telecom.Type, _ => TelecomsTypeEnum.PhoneNumber);
     }
 }

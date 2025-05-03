@@ -16,6 +16,11 @@ public class BaseRepository<TEntity>(SmartHealthContext context): IRepositoryBas
     }
 
     public virtual TEntity? GetByID(int id) => this.Entities.Find(id);
+    public TEntity? FindOneWhere(Expression<Func<TEntity, bool>> predicate)
+    {
+        return this.Entities.FirstOrDefault(predicate);
+    }
+
     public virtual IQueryable<TEntity> GetAllQueryable()
     {
         return (this.Entities);

@@ -13,7 +13,7 @@ public class DoctorSeeder: Faker<Doctor>
     private EmailSeeder emailSeeder = new(); 
     private PhoneNumberSeeder phoneNumberSeeder = new(); 
     private AddressesSeeder addressesSeeder = new();
-    private LoginSeeder loginSeeder = new();
+    private LoginSeeder loginSeeder = new(RolesEnum.Doctor);
     private AvailabilitySeeder availabilitySeeder = new();
     private AvailabilitySeeder availabilitySeeder2 = new(1);
     public DoctorSeeder():base("fr")
@@ -35,6 +35,7 @@ public class DoctorSeeder: Faker<Doctor>
         RuleFor(doctor => doctor.Login, faker => loginSeeder.Generate());
         RuleFor(doctor => doctor.Avatar, f => f.Internet.Avatar());
         RuleFor(doctor => doctor.Availability, _ => [availabilitySeeder.Generate(), availabilitySeeder2.Generate()]);
-        RuleFor(doctor => doctor.Appointments, _ => new AppointmentsSeeder().Generate(10));
+        RuleFor(doctor => doctor.Appointments, _ => new AppointmentsSeeder().Generate(20));
+        RuleFor(doctor => doctor.Speciality, f => f.Random.Enum<DoctorSpeciality>());
     }
 }

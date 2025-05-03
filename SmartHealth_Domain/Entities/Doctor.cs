@@ -4,16 +4,19 @@ namespace SmartHealth_Domain.Entities;
 
 public record Doctor
 {
-    public int DoctorId { get; init; }
-    public string INAMI { get; init; }
-    public string Avatar { get; init; } = null!;
-    public string FirstName { get; init; } = null!;
-    public string LastName { get; init; } = null!;
-    public List<Telecom> Telecoms { get; init; } = null!;
-    public Address ProfessionalAddress { get; init; } = null!;
-    public Address PersonalAddress { get; init; } = null!;
-    public LanguagesEnum LanguageSpoken { get; init; }
-    public Login Login { get; init; } = null!;
-    public List<DoctorAvailability> Availability { get; init; } = null!;
-    public List<Appointment> Appointments { get; init; }
+    public int DoctorId { get; set; }
+    public string INAMI { get; set; }
+    public string Avatar { get; set; } = null!;
+    public string FirstName { get; set; } = null!;
+    public string LastName { get; set; } = null!;
+    public DateOnly BirthDate { get; set; }
+    public List<Telecom> Telecoms { get; set; } = null!;
+    public Address ProfessionalAddress { get; set; } = null!;
+    public Address PersonalAddress { get; set; } = null!;
+    public LanguagesEnum LanguageSpoken { get; set; }
+    public Login Login { get; set; } = null!;
+    public GenderEnum Gender { get; set; }
+    public List<DoctorAvailability> Availability { get; set; } = null!;
+    public List<Appointment> Appointments { get; set; }
+    public DoctorSpeciality Speciality { get; set; }
 }

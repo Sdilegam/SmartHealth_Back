@@ -13,5 +13,6 @@ public record DoctorListDTO
     public string PhoneNumber { get; set; } = null;
     public string Email { get; set; } = null;
     public LanguagesEnum LanguageSpoken { get; init; }
+    public DoctorSpeciality Speciality { get; init; }
 
 }

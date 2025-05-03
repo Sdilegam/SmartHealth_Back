@@ -30,8 +30,11 @@ public class DoctorRepository(SmartHealthContext context) : BaseRepository<Docto
             DateTime CurrDate = start.AddDays(i - 1);
             availabilityQuery = doctor.Availability.Where(a =>
                 a.ValidtyStart <= CurrDate && (a.ValidtyEnd is null || a.ValidtyEnd > CurrDate));
-            availabilityQuery = availabilityQuery.Where(a => a.Days.HasFlag((DaysOfWeekEnum) (1 << (i-1))))
-                .Where(a=>a.EndTime > TimeOnly.FromDateTime(DateTime.Now));
+            availabilityQuery = availabilityQuery.Where(a => a.Days.HasFlag((DaysOfWeekEnum) (1 << (i-1))));
+            if (CurrDate.Date == DateTime.Today)
+            {
+                availabilityQuery = availabilityQuery.Where(a => a.EndTime > TimeOnly.FromDateTime(DateTime.Now));
+            }
             availabilityList.AddRange(availabilityQuery.Select(a => new WorkingHoursDTO
                 {
                     DaysOfWeek = [i],
@@ -61,6 +64,11 @@ public class DoctorRepository(SmartHealthContext context) : BaseRepository<Docto
         return slotsList;
     }
 
+    public Doctor? GetDoctorByLoginID(int loginID)
+    {
+        return context.Doctors.SingleOrDefault(patient => patient.Login.LoginID == loginID);
+    }
+
     private List<SlotsTaken> SlotsTakenPerDay(List<Appointment> list)
     {
         List<SlotsTaken> slotList = new();
@@ -70,26 +78,19 @@ public class DoctorRepository(SmartHealthContext context) : BaseRepository<Docto
         }
 
         DateTime start = list[0].StartTime;
-        DateTime end = list[0].StartTime.AddMinutes(list[0].Duration.TotalMinutes);
-        bool added = true;
+        DateTime end = list[0].EndTime;
         foreach (Appointment item in list)
         {
-            if (added == true)
-            {
-                start = list[0].StartTime;
-                end = list[0].StartTime.AddMinutes(list[0].Duration.TotalMinutes);
-                added = false;
-            }
 
-            if (item.StartTime <= end.AddMinutes(15)) end = item.StartTime.AddMinutes(item.Duration.TotalMinutes);
-            else
+            if (item.StartTime <= end.AddMinutes(15) && item.EndTime >= end) end = item.EndTime;
+            else if (item.EndTime > end)
             {
-                slotList.Add(new SlotsTaken { EndDate = end.AddMinutes(5), StartDate = start.AddMinutes(-5), ClassNames = ["DoctorBusyBG"] });
-                added = true;
+                slotList.Add(new SlotsTaken { EndDate = end, StartDate = start, ClassNames = ["DoctorBusyBG"] });
+                start = item.StartTime;
+                end = item.EndTime;
             }
-        }
-
-        if (!added) slotList.Add(new SlotsTaken { EndDate = end.AddMinutes(5), StartDate = start.AddMinutes(-5), ClassNames = ["DoctorBusyBG"] });
+        } 
+        slotList.Add(new SlotsTaken { EndDate = end, StartDate = start, ClassNames = ["DoctorBusyBG"] });
         return slotList;
     }
 }
