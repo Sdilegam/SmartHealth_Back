@@ -90,7 +90,7 @@ using (var scope = app.Services.CreateScope())
     {
         // db.Database.EnsureCreated();
     }
-        db.Database.EnsureDeleted();
+        //db.Database.EnsureDeleted();
     // db.Database.EnsureDeleted();
     // db.Database.EnsureCreated();
     db.Database.Migrate();
