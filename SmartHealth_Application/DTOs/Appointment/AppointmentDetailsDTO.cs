@@ -2,7 +2,7 @@
 
 namespace SmartHealth_Application.DTOs.Appointment;
 
-public record AppointmentListDTO
+public record AppointmentDetailsDTO
 {
     public int appointmentID { get; init; }
     public string startDate { get; init; }
@@ -10,16 +10,22 @@ public record AppointmentListDTO
     public AppointmentTypeEnum type { get; init; }
     public AppointmentStatusEnum status { get; init; }
     public Doctor doctor { get; init; }
+
     public record Doctor
     {
         public int doctorID { get; init; }
         public string name { get; init; }
     }
-    public PAtient patient { get; init; }
-    public record PAtient
+    public Patient patient { get; init; }
+
+    public record Patient
     {
         public int patientID { get; init; }
         public string name { get; init; }
     }
-    
-};
+    public string creationDate { get; set; }
+    public string? realStartTime { get; set; }
+    public string? realEndTime { get; set; }
+    public string patientsNotes { get; set; }
+    public string doctorsNotes { get; set; }
+}

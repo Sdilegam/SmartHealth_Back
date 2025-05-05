@@ -40,4 +40,25 @@ public class AppointmentService(IAppointmentRepository appointmentRepository, ID
         if (appointment is null) throw new System.Exception("Appointment not found");
         appointmentRepository.cancel(patient, appointment);
     }
+
+    public AppointmentDetailsDTO? getAppointmentDetails(int appointmentId, int userID)
+    {
+        Appointment app = null!;
+        Patient? patient = authRepository.getPatientFromLogin(userID);
+        if (patient is null)
+        {
+            Doctor? doctor = authRepository.getDoctorFromLogin(userID);
+            if (doctor is null) throw new System.Exception("Could not identify user");
+            else
+            {
+                app = appointmentRepository.FindOneWhere(a=>a.AppointmentID == appointmentId && a.Doctor ==  doctor);
+            }
+        }
+        else
+        {
+            app = appointmentRepository.FindOneWhere(a=>a.AppointmentID == appointmentId && a.Patient ==  patient);
+        }
+        if (app is null) throw new Exception("Appointment not found");
+        return (app.ToAppointmentDetailsDTO());
+    }
 }

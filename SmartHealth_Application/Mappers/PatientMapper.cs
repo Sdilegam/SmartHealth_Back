@@ -5,9 +5,9 @@ namespace SmartHealth_Application.Mappers;
 
 public static class PatientMapper
 {
-    public static PatientUserViewModel ToPatientUserVM(this Patient patient)
+    public static UserViewModel ToPatientUserVM(this Patient patient)
     {
-        PatientUserViewModel patientUserViewModel = new()
+        UserViewModel userViewModel = new()
         {
             Address = patient.PersonalAdress.ToDTO(),
             BirthDate = patient.BirthDate,
@@ -18,6 +18,6 @@ public static class PatientMapper
             gender = patient.Gender,
             PhoneNumber = patient.PhoneNumber,
         };
-        return patientUserViewModel;
+        return userViewModel;
     }
 }

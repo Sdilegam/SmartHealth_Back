@@ -51,6 +51,9 @@ builder.Services.AddScoped<IDoctorService, DoctorService>();
 builder.Services.AddScoped<IAppointmentService, AppointmentService>();
 builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<IAuthRepository, AuthRepository>();
+builder.Services.AddScoped<IMedecineService, MedecineService>();
+builder.Services.AddScoped<IMedecineRepository, MedecineRepository>();
+
 TokenManager.Config config = new()
 {
     Audience = builder.Configuration["Jwt:Audience"],
@@ -82,6 +85,12 @@ var app = builder.Build();
 using (var scope = app.Services.CreateScope())
 {
     var db = scope.ServiceProvider.GetRequiredService<SmartHealthContext>();
+
+    if (app.Environment.IsDevelopment())
+    {
+        db.Database.EnsureDeleted();
+        // db.Database.EnsureCreated();
+    }
     // db.Database.EnsureDeleted();
     // db.Database.EnsureCreated();
     db.Database.Migrate();
@@ -93,17 +102,12 @@ app.MapGet("", async (context) => { context.Response.Redirect($"http://localhost
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
-    app.UseSwagger(options => { options.RouteTemplate = "/openapi/{documentName}.json"; });
-    app.UseSwagger();
-    app.MapScalarApiReference();
-    // (options =>
-    // {
-    //     options.WithTitle("SmartHealth - Scalar")
-    //         .WithDefaultHttpClient(ScalarTarget.JavaScript, ScalarClient.Fetch)
-    //         .WithDarkMode(false)
-    //         .Servers = [new ($"http://localhost:{port}")];
-    // });
+    app.MapGet("", async (context) => { context.Response.Redirect($"http://localhost:{port}/scalar"); });
 }
+
+app.UseSwagger(options => { options.RouteTemplate = "/openapi/{documentName}.json"; });
+app.UseSwagger();
+app.MapScalarApiReference();
 
 app.UseCors();
 

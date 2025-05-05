@@ -4,6 +4,7 @@ using SmartHealth_Domain.Enums;
 using SmartHealth_Infrastructure.Seeder.AddressesSeeder;
 using SmartHealth_Infrastructure.Seeder.AppointmentsSeeder;
 using SmartHealth_Infrastructure.Seeder.LoginSeeder;
+using SmartHealth_Infrastructure.Seeder.PatientSeeder;
 using SmartHealth_Infrastructure.Seeder.TelecomSeeder;
 
 namespace SmartHealth_Infrastructure.Seeding.DoctorSeeder;
@@ -16,8 +17,10 @@ public class DoctorSeeder: Faker<Doctor>
     private LoginSeeder loginSeeder = new(RolesEnum.Doctor);
     private AvailabilitySeeder availabilitySeeder = new();
     private AvailabilitySeeder availabilitySeeder2 = new(1);
+    private PatientSeeder patientSeeder = new();
     public DoctorSeeder():base("fr")
     {
+        
         UseSeed(42);
         RuleFor(doctor => doctor.INAMI, f => f.Hashids.ToString());
         RuleFor(doctor => doctor.LanguageSpoken,
@@ -32,10 +35,12 @@ public class DoctorSeeder: Faker<Doctor>
         });
         RuleFor(doctor => doctor.ProfessionalAddress, _ => addressesSeeder.Generate());
         RuleFor(doctor => doctor.PersonalAddress, _ => addressesSeeder.Generate());
-        RuleFor(doctor => doctor.Login, faker => loginSeeder.Generate());
+        RuleFor(doctor => doctor.Login, (faker, d) => loginSeeder.RuleFor(l=>l.Email, f=>f.Internet.Email(d.FirstName, d.LastName))
+            .RuleFor(l=>l.Username, _=> "DR" + d.LastName + d.FirstName.ToUpper()[0] )
+            .Generate());
         RuleFor(doctor => doctor.Avatar, f => f.Internet.Avatar());
         RuleFor(doctor => doctor.Availability, _ => [availabilitySeeder.Generate(), availabilitySeeder2.Generate()]);
-        RuleFor(doctor => doctor.Appointments, _ => new AppointmentsSeeder().Generate(20));
+        RuleFor(doctor => doctor.Appointments, _ => new AppointmentsSeeder(patientSeeder).Generate(20));
         RuleFor(doctor => doctor.Speciality, f => f.Random.Enum<DoctorSpeciality>());
     }
 }

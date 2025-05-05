@@ -8,10 +8,10 @@ namespace SmartHealth_Application.Services;
 
 public class PatientService(IPatientRepository patientRepository):IPatientService
 {
-    public PatientUserViewModel GetPatientInfo(int loginID)
+    public UserViewModel GetPatientInfo(int loginID)
     {
         Patient? patient =  patientRepository.GetPatientByLoginID(loginID);
-        PatientUserViewModel vmToReturn = patient.ToPatientUserVM();
+        UserViewModel vmToReturn = patient.ToPatientUserVM();
 
         return vmToReturn;
     }
