@@ -12,15 +12,36 @@ namespace SmartHealth_API.Controllers;
 public class AppointmentController(IAppointmentService appointmentService):ControllerBase
 {
     [HttpGet()]
+    [Authorize]
     public IActionResult GetAll()
     {
         List<AppointmentListDTO> appointmentsToReturn = null!;
-        
         int userID = this.getId();
+        
         appointmentsToReturn = appointmentService.GetAll(userID, User.FindFirst(ClaimTypes.Role).Value);
         if (appointmentsToReturn.Count == 0)
             return (NoContent());
         return (Ok(appointmentsToReturn));
+    }
+
+    [HttpGet("{appointmentID}")]
+    [Authorize]
+    public IActionResult GetAppointmentDetails([FromRoute] int appointmentID)
+    {
+        int userID = this.getId();
+        AppointmentDetailsDTO DTOToReturn = null!;
+        try
+        {
+            DTOToReturn = appointmentService.getAppointmentDetails(appointmentID, userID);
+
+        }
+        catch (Exception e)
+        {
+            return NotFound(e.Message);
+        }
+
+        if (DTOToReturn is null) return (NotFound());
+        return (Ok(DTOToReturn));
     }
     
     [Authorize(Roles = "Patient")]

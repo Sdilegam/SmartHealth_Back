@@ -1,5 +1,6 @@
 using SmartHealth_Application.DTOs.Doctor;
 using SmartHealth_Application.DTOs.DoctorAvailability;
+using SmartHealth_Application.DTOs.Patient;
 using SmartHealth_Application.Interfaces.Repositories;
 using SmartHealth_Application.Interfaces.Services;
 using SmartHealth_Application.Mappers;
@@ -40,9 +41,19 @@ public class DoctorService(IDoctorRepository doctorRepository):IDoctorService
 
     public AvailabilityReturnDTO GetAvailability(int id, AvailabilityRequestRange range)
     {
+        Doctor doctor = doctorRepository.GetByID(id);
         List<WorkingHoursDTO> availabilityList = doctorRepository.GetAvailabilityList(id, range);
         List<SlotsTaken> slotsList = doctorRepository.GetSlotsTaken(id, range);
+        string doctorName = "Dr. " + doctor.LastName + " " + doctor.FirstName[0] + ".";
+        return (new AvailabilityReturnDTO{doctorName = doctorName, WorkingHours=availabilityList,SlotsTaken=slotsList});
+    }
 
-        return (new AvailabilityReturnDTO{WorkingHours=availabilityList,SlotsTaken=slotsList});
+    public UserViewModel GetDoctorInfo(int userID)
+    {
+        
+        Doctor? doctor =  doctorRepository.GetDoctorByLoginID(userID);
+        UserViewModel vmToReturn = doctor.ToPatientUserVM();
+
+        return vmToReturn;
     }
 }

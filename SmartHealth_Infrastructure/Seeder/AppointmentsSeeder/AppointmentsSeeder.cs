@@ -7,9 +7,8 @@ namespace SmartHealth_Infrastructure.Seeder.AppointmentsSeeder;
 public class AppointmentsSeeder: Faker<Appointment>
 {
     private int index = 0;
-    private PatientSeeder.PatientSeeder patientSeeder = new();
 
-    public AppointmentsSeeder():base("fr")
+    public AppointmentsSeeder(PatientSeeder.PatientSeeder patientSeeder):base("fr")
     {
         UseSeed(42);
         RuleFor(a=>a.Patient, _ => patientSeeder.Generate());

@@ -3,7 +3,7 @@ using SmartHealth_Domain.Enums;
 
 namespace SmartHealth_Application.DTOs.Patient;
 
-public record PatientUserViewModel
+public record UserViewModel
 {
     public string DisplayName { get; set; }
     public string FirstName { get; set; }

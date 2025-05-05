@@ -51,6 +51,9 @@ builder.Services.AddScoped<IDoctorService, DoctorService>();
 builder.Services.AddScoped<IAppointmentService, AppointmentService>();
 builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<IAuthRepository, AuthRepository>();
+builder.Services.AddScoped<IMedecineService, MedecineService>();
+builder.Services.AddScoped<IMedecineRepository, MedecineRepository>();
+
 TokenManager.Config config = new()
 {
     Audience = builder.Configuration["Jwt:Audience"],
@@ -68,42 +71,41 @@ builder.Services.AddCors(b => b.AddDefaultPolicy(o =>
     o.AllowAnyHeader();
 }));
 
-builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(o => o.TokenValidationParameters = new TokenValidationParameters
-{
-    ValidateAudience = true,
-    ValidAudience = config.Audience,
-    ValidateIssuer = true,
-    ValidIssuer = config.Issuer,
-    ValidateLifetime = true,
-    ValidateIssuerSigningKey = true,
-    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(config.Secret))
-});
+builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(o =>
+    o.TokenValidationParameters = new TokenValidationParameters
+    {
+        ValidateAudience = true,
+        ValidAudience = config.Audience,
+        ValidateIssuer = true,
+        ValidIssuer = config.Issuer,
+        ValidateLifetime = true,
+        ValidateIssuerSigningKey = true,
+        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(config.Secret))
+    });
 var app = builder.Build();
 using (var scope = app.Services.CreateScope())
 {
     var db = scope.ServiceProvider.GetRequiredService<SmartHealthContext>();
-    db.Database.EnsureDeleted();
-    db.Database.EnsureCreated();
+
+    if (app.Environment.IsDevelopment())
+    {
+        db.Database.EnsureDeleted();
+        // db.Database.EnsureCreated();
+    }
     db.Database.Migrate();
 }
 
 var port = app.Configuration["Host:Port"];
 
-app.MapGet("", async (context) => { context.Response.Redirect($"http://localhost:{port}/scalar"); });
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
-    app.UseSwagger(options => { options.RouteTemplate = "/openapi/{documentName}.json"; });
-    app.UseSwagger();
-    app.MapScalarApiReference();
-    // (options =>
-    // {
-    //     options.WithTitle("SmartHealth - Scalar")
-    //         .WithDefaultHttpClient(ScalarTarget.JavaScript, ScalarClient.Fetch)
-    //         .WithDarkMode(false)
-    //         .Servers = [new ($"http://localhost:{port}")];
-    // });
+    app.MapGet("", async (context) => { context.Response.Redirect($"http://localhost:{port}/scalar"); });
 }
+
+app.UseSwagger(options => { options.RouteTemplate = "/openapi/{documentName}.json"; });
+app.UseSwagger();
+app.MapScalarApiReference();
 
 app.UseCors();
 

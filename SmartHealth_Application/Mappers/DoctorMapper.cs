@@ -1,5 +1,7 @@
 using SmartHealth_Application.DTOs.Doctor;
+using SmartHealth_Application.DTOs.Patient;
 using SmartHealth_Domain.Entities;
+using SmartHealth_Domain.Enums;
 
 namespace SmartHealth_Application.Mappers;
 
@@ -21,4 +23,19 @@ public static class DoctorMapper
         };
         return DTOToReturn;
     } 
+    public static UserViewModel ToPatientUserVM(this Doctor doctor)
+    {
+        UserViewModel userViewModel = new()
+        {
+            Address = doctor.PersonalAddress.ToDTO(),
+            BirthDate = doctor.BirthDate,
+            DisplayName = doctor.FirstName + " " + doctor.LastName,
+            FirstName = doctor.FirstName,
+            LastName = doctor.LastName,
+            Email = doctor.Login.Email,
+            gender = doctor.Gender,
+            PhoneNumber = doctor.Telecoms.FirstOrDefault(t=>t.Type==TelecomsTypeEnum.PhoneNumber).TelecomValue,
+        };
+        return userViewModel;
+    }
 }

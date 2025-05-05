@@ -11,9 +11,11 @@ public class PatientSeeder:Faker<Patient>
     public PatientSeeder():base("fr")
     {
         UseSeed(42);
-        RuleFor(patient => patient.Login, f => loginSeeder.Generate());
         RuleFor(patient => patient.FirstName, f => f.Name.FirstName());
         RuleFor(patient => patient.LastName, f => f.Name.LastName());
+        RuleFor(patient => patient.Login, (faker, p) => loginSeeder.RuleFor(l=>l.Email, f=>f.Internet.Email(p.FirstName, p.LastName))
+            .RuleFor(l=>l.Username, _=> p.LastName + p.FirstName.ToUpper()[0] )
+            .Generate());
         RuleFor(patient => patient.PersonalAdress, f => addressesSeeder.Generate());
     }
 }
